@@ -20,7 +20,7 @@
    ```bash
    git clone <repository-url>
    cd <project-directory>
-```
+   ```
 
 2. **Установите зависимости**:
 ```bash
