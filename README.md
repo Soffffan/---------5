@@ -23,9 +23,9 @@
    ```
 
 2. **Установите зависимости**:
-```bash
-  npm install
-```
+   ```bash
+     npm install
+   ```
 
 3. **Перейдите в папку backend и запустите server.js**
    ```bash
