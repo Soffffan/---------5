@@ -60,10 +60,7 @@ document.getElementById('fetchProtectedData').addEventListener('click', async ()
 function displayProtectedData(data) {
     const [header, payload, signature] = token.split('.');
 
-    // Decode the payload and parse it as JSON
     const decodedPayload = JSON.parse(atob(payload));
-
-    // Convert the decoded payload back to a string with indentation
     const formattedPayload = JSON.stringify(decodedPayload, null, 2);
 
     const protectedDataContainer = document.getElementById('protectedData');
