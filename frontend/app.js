@@ -12,7 +12,9 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     });
 
     const result = await response.json();
-    document.getElementById('registerMessage').textContent = result.message || 'Registration failed';
+    const mes = document.getElementById('registerMessage');
+    mes.style.display = 'block';
+    mes.textContent = result.message || 'Ошибка при регистрации';
 });
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -29,15 +31,17 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const result = await response.json();
     if (response.ok) {
         token = result.token;
-        document.getElementById('loginMessage').textContent = 'Login successful!';
+        const mes = document.getElementById('loginMessage');
+        mes.style.display = 'block';
+        mes.textContent = 'Вход выполнен успешно!';
     } else {
-        document.getElementById('loginMessage').textContent = result.message || 'Login failed';
+        document.getElementById('loginMessage').textContent = result.message || 'Ошибка при входе';
     }
 });
 
 document.getElementById('fetchProtectedData').addEventListener('click', async () => {
     if (!token) {
-        document.getElementById('protectedData').textContent = 'Please login first';
+        document.getElementById('protectedData').textContent = 'Сначала войдите в свой аккаунт';
         return;
     }
 
@@ -47,8 +51,32 @@ document.getElementById('fetchProtectedData').addEventListener('click', async ()
 
     const result = await response.json();
     if (response.ok) {
-        document.getElementById('protectedData').textContent = JSON.stringify(result);
+        displayProtectedData(result);
     } else {
         document.getElementById('protectedData').textContent = 'Access denied';
     }
 });
+
+function displayProtectedData(data) {
+    const [header, payload, signature] = token.split('.');
+
+    // Decode the payload and parse it as JSON
+    const decodedPayload = JSON.parse(atob(payload));
+
+    // Convert the decoded payload back to a string with indentation
+    const formattedPayload = JSON.stringify(decodedPayload, null, 2);
+
+    const protectedDataContainer = document.getElementById('protectedData');
+    protectedDataContainer.style.display = "block";
+
+    protectedDataContainer.innerHTML = `
+        <div class="data-item">${data.message}</div>
+        <div class="data-item">User ID: ${data.user.userId}</div>
+        <div class="token-container">
+            <div class="token-part"><strong>Заголовок:</strong> <pre>${header}</pre></div>
+            <div class="token-part"><strong>Полезная нагрузка:</strong> <pre>${payload}</pre></div>
+            <div class="token-part_1"><strong>Расшифрованная полезная нагрузка:</strong> <pre>${formattedPayload}</pre></div>
+            <div class="token-part"><strong>Подпись:</strong> <pre>${signature}</pre></div>
+        </div>
+    `;
+}
