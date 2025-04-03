@@ -35,7 +35,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         mes.style.display = 'block';
         mes.textContent = 'Вход выполнен успешно!';
     } else {
-        document.getElementById('loginMessage').textContent = result.message || 'Ошибка при входе';
+        const mes = document.getElementById('loginMessage');
+        mes.style.display = 'block';
+        mes.textContent = result.message || 'Ошибка при входе';
     }
 });
 
